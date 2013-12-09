@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<sandwich>
+    <fillings>
+        <name>ham</name>
+    </fillings>
+    <name>testSandwich</name>
+</sandwich>
