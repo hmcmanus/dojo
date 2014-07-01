@@ -5,9 +5,7 @@ import org.junit.Test;
 
 import java.io.File;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class FileWatchDogTest {
 
@@ -31,11 +29,13 @@ public class FileWatchDogTest {
         assertEquals("Returned File name", "watchFileNotModified.txt", fileName);
 
         // Modify the file's name and then ask for the old file and make sure it's not cached
-        watchFile.renameTo(new File(watchFile.getParent() + "/" + "watchFileModified.txt"));
-        // Need to give it a second here for the other thread to clean the cache
-        Thread.sleep(1000);
+        if (!watchFile.renameTo(new File(watchFile.getParent() + "/" + "watchFileModified.txt"))) {
+            fail("Unable to rename the file");
+        }
 
-        assertNull("Returned File name", fileWatchDog.getFileName("watchFileNotModified"));
+        // Need to give it a second here for the other thread to clean the cache
+        Thread.sleep(2000);
+        assertNull("Returned File name", fileWatchDog.getFileName("watchFileNotModified.txt"));
 
         // Then ask for the new file name and make sure it's available
         assertEquals("Returned File name", "watchFileModified.txt", fileWatchDog.getFileName("watchFileModified"));
